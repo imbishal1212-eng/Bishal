@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Warranty - Prism Construction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-prism: #16a34a;
+            --blue-prism: #0558ab;
+            --orange-prism: #f59e0b;
+            --dark-orange: #cc5500;
+            --red-nav: #cc3e35;
+            --btn-grey: #3e3e3e;
+            --bg-gradient: linear-gradient(244.9deg, rgba(255, 255, 183, 1) 0%, rgba(244, 252, 255, 1) 46.63%, rgba(255, 255, 255, 1) 69.71%);
+            --header-bg: #f3f4f6;
+            --new-grey: #5a5a5a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Global Layout --- */
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: "Manrope", sans-serif;
+            background: var(--bg-gradient);
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* WEB: Strictly Non-Scrollable */
+        @media (min-width: 1025px) {
+            body { overflow: hidden; }
+            .app-container { 
+                height: 100vh; 
+                display: grid;
+                grid-template-rows: 62px 1fr 57px; /* Fixed Header, Flex Main, Fixed Footer */
+            }
+        }
+
+        /* --- Header --- */
+        .header {
+            height: 62px;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--header-bg);
+            border-bottom: 0.5px solid #000;
+            flex-shrink: 0;
+            position: sticky; /* Make header sticky */
+            top: 0;            /* Stick to top */
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 0 5%; }
+        }
+
+        .logo { font-size: 20px; font-weight: 500; width: 100px; color: #000; text-decoration: none; }
+        
+        /* Desktop Nav */
+        .desktop-nav { display: none; }
+        @media (min-width: 1025px) {
+            .desktop-nav { display: flex; gap: 40px; align-items: center; }
+            .nav-link { text-decoration: none; color: #000; font-size: 16px; font-weight: 500; }
+            .nav-link.active { color: var(--red-nav); }
+            .nav-link:hover { color: var(--red-nav); }
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            z-index: 1100;
+            padding: 5px;
+        }
+        @media (min-width: 1025px) { .hamburger { display: none; } }
+
+        .hamburger span { width: 24px; height: 2px; background: #000; transition: 0.3s; border-radius: 2px; }
+        .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        .mobile-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 1050; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 30px;
+            transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .mobile-menu.open { transform: translateY(0); }
+        .mobile-nav-link { font-size: 24px; font-weight: 600; color: #000; text-decoration: none; }
+        .mobile-nav-link.active { color: var(--red-nav); }
+
+        .header-right { display: flex; align-items: center; gap: 10px; }
+        .call-icon { width: 32px; height: 32px; background: #fca5a533; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .call-info { line-height: 1.2; display: none; } 
+        @media (min-width: 768px) { .call-info { display: block; } }
+        .call-label { font-size: 11px; font-weight: 500; display: block; text-align: right; }
+        .call-number { font-size: 14px; font-weight: 600; color: var(--orange-prism); }
+
+        /* --- Main Content --- */
+        .main {
+            flex: 1;
+            padding: 20px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @media (max-width: 1024px) { 
+            .main { overflow-y: auto; padding-bottom: 40px; padding-top: 40px; } 
+        }
+
+        .warranty-hero {
+            text-align: center;
+            max-width: 950px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Adaptive vertical gaps based on height */
+            gap: clamp(15px, 3vh, 35px); 
+        }
+
+        .hero-title {
+            color: var(--blue-prism);
+            /* Slightly bigger hero title */
+            font-size: clamp(32px, 7vh, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .huge-20 {
+            color: var(--dark-orange);
+            /* Slightly bigger number */
+            font-size: clamp(100px, 20vh, 160px);
+            font-weight: 700;
+            line-height: 0.8;
+            margin: 5px 0;
+        }
+
+        .subtitle {
+            color: var(--blue-prism);
+            /* Slightly bigger subtitle */
+            font-size: clamp(24px, 5.5vh, 50px);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .description {
+            color: #000;
+            /* Slightly bigger description */
+            font-size: clamp(16px, 2.5vh, 24px);
+            font-weight: 300;
+            line-height: 1.5;
+            max-width: 750px;
+        }
+
+        /* --- Buttons --- */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: clamp(25px, 5vh, 50px);
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (min-width: 768px) { .btn-group { flex-direction: row; gap: 30px; } }
+
+        .btn {
+            /* Slightly wider and taller buttons */
+            width: clamp(200px, 18vw, 240px);
+            height: clamp(55px, 8vh, 70px);
+            border-radius: 4px;
+            border: 0.5px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(16px, 2vh, 20px);
+            font-weight: 500;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-blue { background: var(--blue-prism); color: #fff; gap: 10px; }
+        .btn-dark { background: var(--btn-grey); color: #fff; }
+        .btn:hover { opacity: 0.9; }
+
+        /* --- Sidebar / Bottom Nav --- */
+        .sidebar { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; display: flex; flex-direction: row; 
+            justify-content: space-around; padding: 12px; border-radius: 16px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.3); z-index: 2000;
+        }
+
+        @media (min-width: 1025px) { 
+            .sidebar { 
+                position: absolute; right: 48px; top: 50%; transform: translateY(-50%); left: auto; 
+                width: 140px; flex-direction: column; justify-content: center; gap: clamp(25px, 6vh, 45px); 
+                background: transparent; backdrop-filter: none; border: none; box-shadow: none; padding: 0; 
+            } 
+        }
+
+        .side-item { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; cursor: pointer; color: #000; text-decoration: none; transition: all 0.2s; }
+        @media (min-width: 1025px) { 
+            .side-item { flex-direction: row; font-size: clamp(16px, 2.2vh, 22px); gap: 12px; } 
+            .side-item:hover { color: var(--green-prism); }
+        }
+        .side-item.active { color: var(--green-prism); }
+        .svg-icon { width: clamp(20px, 2.8vh, 26px); height: clamp(20px, 2.8vh, 26px); fill: currentColor; }
+
+        /* --- Footer --- */
+        .footer {
+            height: 57px;
+            background: #e5e7eb;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 0.5px solid #000;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* FIX: Overlapping bottom nav on mobile */
+        @media (max-width: 1024px) {
+            .footer {
+                padding-bottom: 110px; /* Buffer for floating bottom nav */
+                height: auto;
+                min-height: 57px;
+                padding-top: 20px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+
+        .copyright { font-size: 16px; font-weight: 500; color: #000; flex: 1; text-align: center; }
+        .socials { display: flex; gap: 17px; }
+        .soc-box { width: 29px; height: 24px; background: #d9d9d9; border-radius: 5px; }
+
+        @media (max-width: 768px) {
+            .copyright { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="prism_why_us.html" class="mobile-nav-link" onclick="toggleMenu()">Home</a>
+    <a href="About.html" class="mobile-nav-link" onclick="toggleMenu()">About</a>
+    <a href="Project.html" class="mobile-nav-link" onclick="toggleMenu()">Projects</a>
+    <a href="Blog.html" class="mobile-nav-link" onclick="toggleMenu()">Blog</a>
+    <a href="Testimonials.html" class="mobile-nav-link" onclick="toggleMenu()">Testimonials</a>
+    <a href="Contact.html" class="mobile-nav-link" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="app-container">
+    <header class="header">
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="logo">SANTI</div>
+        <nav class="desktop-nav">
+            <a href="prism_why_us.html" class="nav-link active">Home</a>
+            <a href="About.html" class="nav-link">About</a>
+            <a href="Project.html" class="nav-link">Projects</a>
+            <a href="Blog.html" class="nav-link">Blog</a>
+            <a href="Testimonials.html" class="nav-link">Testimonials</a>
+            <a href="Contact.html" class="nav-link">Contact</a>
+        </nav>
+        <div class="header-right">
+            <div class="call-icon">
+                <svg viewBox="0 0 24 24" fill="#cc3e35" width="16" height="16"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+            </div>
+            <div class="call-info">
+                <span class="call-label">Call Us</span>
+                <span class="call-number">+91 123456789</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="warranty-hero">
+            <h1 class="hero-title">Your Property Built to Last</h1>
+            <div class="huge-20">20</div>
+            <div class="subtitle">YEARS WARRANTY</div>
+            <p class="description">
+                We stand by our quality. Every Indecimal project comes with a comprehensive structural warranty, giving you peace of mind for decades.
+            </p>
+
+            <div class="btn-group">
+                <a href="#" class="btn btn-blue">
+                    Start Your Project
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="#" class="btn btn-dark">Download Brochure</a>
+            </div>
+        </div>
+
+        <!-- Sidebar / Bottom Nav -->
+        <aside class="sidebar">
+            <a href="Why-us.html" class="side-item">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"/></svg>
+                <span>Why Us</span>
+            </a>
+            <a href="Process.html" class="side-item">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14,2H6C4.89,2,4,2.89,4,4V20C4,21.11,4.89,22,6,22H18C19.11,22,20,21.11,20,20V8L14,2M13,9V3.5L18.5,9H13M12,19V15H16V13H12V9H10V13H6V15H10V19H12Z"/></svg>
+                <span>Process</span>
+            </a>
+            <a href="warranty.html" class="side-item active">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,11.99H19C18.47,16.11 15.72,19.78 12,20.93V12H5V6.3l7-3.11v8.8z"/></svg>
+                <span>Warranty</span>
+            </a>
+        </aside>
+    </main>
+
+    <footer class="footer">
+        <div class="logo">LOGO</div>
+        <div class="copyright">Copyright 2026 @ Construction</div>
+        <div class="socials">
+            <div class="soc-box"></div><div class="soc-box"></div><div class="soc-box"></div><div class="soc-box"></div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('hamburgerBtn');
+        menu.classList.toggle('open');
+        btn.classList.toggle('open');
+        
+        if (window.innerWidth > 1024) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : 'auto';
+        }
+    }
+
+    function handleResize() {
+        if (window.innerWidth > 1024) {
+            document.body.style.overflow = 'hidden';
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('open');
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+</script>
+
+</body>
+</html>

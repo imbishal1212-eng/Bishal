@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Prism Construction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-prism: #16a34a;
+            --blue-prism: #0558ab;
+            --orange-prism: #f59e0b;
+            --red-nav: #cc3e35;
+            --dark-orange: #cc5500;
+            --btn-appointment: #893b36;
+            --bg-gradient: linear-gradient(244.9deg, #ffffb7 0%, #f4fcff 46.63%, #ffffff 69.71%);
+            --header-bg: #f3f4f6;
+            --new-grey: #5a5a5a;
+            --input-bg: rgba(217, 217, 217, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: "Manrope", sans-serif;
+            background: var(--bg-gradient);
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* WEB: Fixed 3-row Grid to guarantee Footer visibility on Desktop (Strictly Non-Scrollable) */
+        @media (min-width: 1025px) {
+            html, body { overflow: hidden; }
+            .app-container { 
+                height: 100vh;
+                display: grid;
+                grid-template-rows: 52px 1fr 57px; /* Reduced header row height */
+                overflow: hidden;
+            }
+        }
+
+        /* --- Header --- */
+        .header {
+            height: 52px; /* Reduced from 62px to move it slightly above */
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--header-bg);
+            border-bottom: 0.5px solid #000;
+            flex-shrink: 0;
+            z-index: 1000;
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+        }
+
+        .logo { font-size: 20px; font-weight: 500; width: 100px; color: #000; text-decoration: none; }
+        
+        .desktop-nav { display: none; }
+        @media (min-width: 1025px) {
+            .desktop-nav { display: flex; gap: 30px; align-items: center; }
+            .nav-link { text-decoration: none; color: #000; font-size: 16px; font-weight: 500; }
+            .nav-link.active { color: var(--red-nav); }
+        }
+
+        .hamburger {
+            display: flex; flex-direction: column; gap: 4px; cursor: pointer;
+            background: transparent; border: none; z-index: 1100; padding: 5px;
+        }
+        @media (min-width: 1025px) { .hamburger { display: none; } }
+        .hamburger span { width: 24px; height: 2px; background: #000; transition: 0.3s; border-radius: 2px; }
+
+        .mobile-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 1050; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 30px;
+            transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .mobile-menu.open { transform: translateY(0); }
+        .mobile-nav-link { font-size: 24px; font-weight: 600; color: #000; text-decoration: none; }
+
+        .header-right { display: flex; align-items: center; gap: 10px; }
+        .call-icon { width: 32px; height: 32px; background: #fca5a533; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .call-info { line-height: 1.1; display: none; } 
+        @media (min-width: 768px) { .call-info { display: block; } }
+        .call-label { font-size: 11px; font-weight: 500; display: block; text-align: right; }
+        .call-number { font-size: 13px; font-weight: 600; color: var(--dark-orange); }
+
+        /* --- Main Content Area --- */
+        .main {
+            flex: 1;
+            padding: clamp(15px, 2vh, 25px) 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        @media (min-width: 1025px) {
+            .main { 
+                justify-content: center;
+                overflow: hidden; /* Locked on Desktop */
+            }
+        }
+
+        /* --- Hero Section --- */
+        .hero { text-align: center; margin-bottom: clamp(10px, 1.5vh, 20px); flex-shrink: 0; width: 100%; }
+        .hero-title { font-size: clamp(28px, 5.5vh, 62px); font-weight: 800; line-height: 1.1; margin-bottom: 8px; }
+        .hero-title .green { color: var(--green-prism); }
+        .hero-title .blue { color: var(--blue-prism); }
+        .hero-desc { font-size: clamp(14px, 1.8vh, 22px); font-weight: 300; color: #000; line-height: 1.3; max-width: 900px; margin: 0 auto; }
+
+        /* --- Grid Layout: Form vs Info (50/50 split) --- */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1280px;
+            align-items: flex-start;
+        }
+
+        @media (min-width: 1025px) {
+            .contact-layout { 
+                grid-template-columns: 1fr 1fr; /* 50% width each */
+                gap: 50px; 
+                align-items: stretch;
+            }
+        }
+
+        /* --- Lead Form --- */
+        .form-panel {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #efefef;
+            padding: clamp(25px, 4vh, 45px) clamp(20px, 3vh, 35px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(15px, 2vh, 22px);
+            width: 100%;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .form-header { display: flex; align-items: center; gap: 15px; }
+        .form-header svg { width: clamp(35px, 4vh, 45px); height: clamp(35px, 4vh, 45px); fill: var(--green-prism); flex-shrink: 0; }
+        .form-header h2 { font-size: clamp(18px, 2.5vh, 20px); font-weight: 700; line-height: 1.1; color: #000; }
+
+        .input-stack { display: flex; flex-direction: column; gap: clamp(10px, 1.5vh, 14px); }
+        .inp-field {
+            background: var(--input-bg);
+            border: 1px solid rgba(116, 113, 113, 0.4);
+            border-radius: 10px;
+            height: clamp(44px, 5vh, 52px);
+            padding: 0 18px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #333;
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .inp-field:focus { border-color: var(--green-prism); background: #fff; }
+
+        .phone-input-row { display: flex; gap: 10px; }
+        .flag-box { 
+            width: 75px; background: var(--input-bg); border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+            font-size: 12px; font-weight: 600; color: #444; border: 1px solid rgba(116, 113, 113, 0.4);
+            flex-shrink: 0;
+        }
+        .flag-box img { width: 20px; border-radius: 2px; }
+
+        .privacy-note { font-size: 13px; font-weight: 300; line-height: 1.4; color: var(--new-grey); margin-top: 5px; }
+        .privacy-note span { color: #b71c1c; cursor: pointer; font-weight: 500; }
+
+        .btn-appointment {
+            background: var(--btn-appointment);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            height: clamp(48px, 6vh, 56px);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, background 0.2s, transform 0.2s;
+            margin-top: 5px;
+            width: 100%;
+        }
+        .btn-appointment:hover { background: #712f2b; transform: translateY(-1px); }
+        .btn-appointment:active { transform: translateY(0); }
+
+        /* --- Info Panel --- */
+        .info-panel { display: flex; flex-direction: column; gap: clamp(15px, 2.2vh, 25px); width: 100%; justify-content: center; }
+        
+        .contact-row { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 640px) { .contact-row { grid-template-columns: 1fr 1fr; gap: 20px; } }
+
+        .info-card { display: flex; align-items: flex-start; gap: 12px; }
+        .info-card svg { width: 35px; height: 35px; fill: var(--blue-prism); flex-shrink: 0; }
+        .info-card div h4 { font-size: clamp(15px, 2vh, 18px); font-weight: 700; letter-spacing: 0.02em; margin-bottom: 2px; }
+        .info-card div p { font-size: 13px; font-weight: 500; line-height: 1.4; color: #111; }
+        .info-card div .sub-p { font-weight: 400; font-size: 12px; color: var(--new-grey); margin-top: 2px; }
+
+        .map-box { 
+            width: 100%; 
+            height: clamp(160px, 32vh, 280px); 
+            background: #e2e8f0; 
+            border-radius: 24px; 
+            overflow: hidden; 
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .map-box iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: 0;
+            display: block;
+        }
+
+        .footer-extras { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            align-items: center; 
+            margin-top: 5px;
+        }
+        @media (min-width: 768px) { .footer-extras { flex-direction: row; justify-content: space-between; } }
+
+        .social-icons { display: flex; gap: 12px; }
+        .social-icons svg { width: 30px; height: 30px; cursor: pointer; fill: var(--blue-prism); transition: all 0.2s; }
+        .social-icons svg:hover { transform: translateY(-2px); fill: var(--green-prism); }
+
+        .policy-links { display: flex; flex-direction: column; gap: 2px; text-align: center; }
+        @media (min-width: 768px) { .policy-links { text-align: right; } }
+        .policy-links a { font-size: 12px; font-weight: 300; color: #444; text-decoration: none; transition: color 0.2s; }
+        .policy-links a:hover { color: var(--green-prism); }
+
+        /* --- Footer --- */
+        .footer { 
+            height: 57px; 
+            background: #ffffff; 
+            padding: 0 5%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border-top: 0.5px solid #000; 
+            flex-shrink: 0; 
+            z-index: 10;
+        }
+        .copyright { font-size: 14px; font-weight: 500; color: #000; flex: 1; text-align: center; }
+        .socials-footer { display: flex; gap: 12px; }
+        .soc-dot { width: 26px; height: 20px; background: #d9d9d9; border-radius: 5px; }
+
+        @media (max-width: 1024px) {
+            .footer { height: auto; padding: 20px 5%; flex-direction: column; gap: 15px; }
+            .socials-footer { order: 2; }
+            .copyright { order: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="prism_why_us.html" class="mobile-nav-link">Home</a>
+    <a href="prism_about.html" class="mobile-nav-link">About</a>
+    <a href="prism_projects.html" class="mobile-nav-link">Projects</a>
+    <a href="prism_blog.html" class="mobile-nav-link">Blog</a>
+    <a href="prism_testimonials.html" class="mobile-nav-link">Testimonials</a>
+    <a href="#" class="mobile-nav-link active" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="app-container">
+    <header class="header">
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="logo">SANTI</div>
+        <nav class="desktop-nav">
+            <a href="Home.html" class="nav-link">Home</a>
+            <a href="About.html" class="nav-link">About</a>
+            <a href="Project.html" class="nav-link">Projects</a>
+            <a href="Blog.html" class="nav-link">Blog</a>
+            <a href="Testimonials.html" class="nav-link">Testimonials</a>
+            <a href="#" class="nav-link active">Contact</a>
+        </nav>
+        <div class="header-right">
+            <div class="call-icon">
+                <svg viewBox="0 0 24 24" fill="#cc3e35" width="16" height="16"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+            </div>
+            <div class="call-info">
+                <span class="call-label">Call Us</span>
+                <span class="call-number">+91 123456789</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <h1 class="hero-title"><span class="green">Start Your</span> <span class="blue">Build Today</span></h1>
+            <p class="hero-desc">Have a project in mind? We're here to help you bring your vision to life. Visit our headquarters in Bhubaneswar.</p>
+        </section>
+
+        <div class="contact-layout">
+            <!-- LEAD FORM PANEL -->
+            <section class="form-panel">
+                <div class="form-header">
+                    <svg viewBox="0 0 24 24"><path d="M3,21V7L12,3L21,7V21H15V15H9V21H3M11,10H13V13H11V10M7,10H9V13H7V10M15,10H17V13H15V10Z"/></svg>
+                    <h2>Build Your<br>Dream House</h2>
+                </div>
+                <div class="input-stack">
+                    <input type="text" class="inp-field" placeholder="Full Name">
+                    <input type="text" class="inp-field" placeholder="Plot or Location">
+                    <div class="phone-input-row">
+                        <div class="flag-box">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="IN">
+                            +91
+                        </div>
+                        <input type="text" class="inp-field" placeholder="Phone Number">
+                    </div>
+                </div>
+                <p class="privacy-note">By submitting this form, I acknowledge that I have read and agree to Prism's <span>Privacy Policy.</span></p>
+                <button class="btn-appointment">Book an Appointment</button>
+            </section>
+
+            <!-- INFO PANEL -->
+            <section class="info-panel">
+                <div class="contact-row">
+                    <div class="info-card">
+                        <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+91 12345 67890</p>
+                            <p class="sub-p">Mon-Fri, 8am-6pm</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <svg viewBox="0 0 24 24"><path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"/></svg>
+                        <div>
+                            <h4>E-mail</h4>
+                            <p>hello@prism.com</p>
+                            <p class="sub-p">quotes@prism.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <svg viewBox="0 0 24 24"><path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"/></svg>
+                    <div>
+                        <h4>Headquarters</h4>
+                        <p>Bhubaneswar, Odisha</p>
+                        <p class="sub-p">Pincode: 751001</p>
+                    </div>
+                </div>
+
+                <!-- INTEGRATED LIVE GOOGLE MAP IFRAME -->
+                <div class="map-box">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.1097236357446!2d85.83131907501057!3d20.295724981176487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909a62ce22db5%3A0xbc788b798a1673cc!2sPrism%20Media!5e0!3m2!1sen!2sin!4v1774346994555!5m2!1sen!2sin" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <div class="footer-extras">
+                    <div class="social-icons">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96C18.34 21.21 22 17.06 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.59,4 11.64,5.95 11.64,8.35C11.64,8.69 11.67,9.03 11.76,9.36C8.12,9.17 4.91,7.43 2.76,4.79C2.38,5.44 2.16,6.19 2.16,7C2.16,8.5 2.92,9.81 4.08,10.59C3.37,10.57 2.7,10.38 2.12,10.06V10.11C2.12,12.21 3.62,13.95 5.6,14.35C5.23,14.45 4.85,14.5 4.45,14.5C4.17,14.5 3.9,14.47 3.64,14.42C4.19,16.14 5.79,17.39 7.68,17.43C6.2,18.59 4.33,19.28 2.29,19.28C1.94,19.28 1.6,19.26 1.26,19.22C3.17,20.45 5.45,21.17 7.89,21.17C15.85,21.17 20.2,14.57 20.2,8.87C20.2,8.68 20.2,8.5 20.2,8.31C21.04,7.7 21.78,6.9 22.46,6Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4A3.6,3.6 0 0,0 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6A3.6,3.6 0 0,0 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M18.5,18.5V13.2A3.26,3.26 0 0,0 15.24,9.94C14.39,9.94 13.4,10.46 12.92,11.24V10.13H10.13V18.5H12.92V13.57C12.92,12.8 13.54,12.17 14.31,12.17A1.4,1.4 0 0,1 15.71,13.57V18.5H18.5M6.88,8.56A1.68,1.68 0 0,0 8.56,6.88C8.56,5.95 7.81,5.19 6.88,5.19A1.69,1.69 0 0,0 5.19,6.88C5.19,7.81 5.95,8.56 6.88,8.56M8.27,18.5V10.13H5.5V18.5H8.27Z"/></svg>
+                    </div>
+                    <div class="policy-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Cancellation & refund policy</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="logo">LOGO</div>
+        <div class="copyright">Copyright 2026 @ Construction</div>
+        <div class="socials-footer">
+            <div class="soc-dot"></div><div class="soc-dot"></div><div class="soc-dot"></div><div class="soc-dot"></div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('hamburgerBtn');
+        menu.classList.toggle('open');
+        btn.classList.toggle('open');
+    }
+
+    function handleResize() {
+        if (window.innerWidth > 1024) {
+            document.body.style.overflow = 'hidden';
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('open');
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+</script>
+
+</body>
+</html>
